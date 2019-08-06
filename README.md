@@ -21,7 +21,7 @@ PlayIN is a new type of playable advertisement technology, allowing users to pla
 
 ## Functional features
 The PlayIN total solution excels with these unique features:
-1. * Optimized audio and video coding and decoding; optimized network protocols; multiple cloud data nodes for lower latency and higher transmission quality and availability*
+1. *Optimized audio and video coding and decoding; optimized network protocols; multiple cloud data nodes for lower latency and higher transmission quality and availability*
 2. *Cloud devices supporting Android and iOS, covering almost all mobile games*
 3. *Combination of physical and virtual cloud devices for easy deployment and cost-efficiency*
 4. *Multi-scene demo play on top of single-scene demo play allowing a single game to generate multiple playable scenes to fit in different audiences preferences*
@@ -54,7 +54,10 @@ The maximum time of game demo play is limited by the advertisement's actual time
 @property (nonatomic, strong) PlayIn *playIn;
 @end
 ```
-#### Step 2  Initialize and check if there is any device available with your sdkKey and adid:
+#### Step 2 
+
+Initialize and check if there is any device available with your sdkKey and adid:
+
 ```objc
 - (void)checkButtonTapped:(UIButton *)sender {
     self.playIn = [PlayIn sharedInstance];
@@ -106,6 +109,7 @@ For two demos, after the first demo, a page will be prompted for users to choose
 }
 ```
 #### Step 4
+
 ```objc
 #pragma mark - PlayIn Delegate
 
@@ -135,7 +139,7 @@ For two demos, after the first demo, a page will be prompted for users to choose
     }
 }
 ```
-## Step 4
+## Contact us
 
 If you have any questions or suggestions while using PlayIN, please email them to (lijunge@playin.tech).We welcome your feedback. If you are interested in cooperating with us, please email us or browse our official website at [PlayIN](https://playinads.com).Once you finish registering your account, Someone from our team will contact you immediately.
 
