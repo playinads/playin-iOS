@@ -2,7 +2,7 @@
 
 PlayIN ADs -The Next Generation Playable ADs Solution
 
-README: [English](https://github.com/playinads/playin-iOS) | [中文](https://github.com/playinads/playin-iOS/edit/master/README.md)
+README: [English](https://github.com/playinads/playin-iOS) | [中文](https://github.com/playinads/playin-iOS/blob/master/README_中文)
 
 
 ![image](https://github.com/lijunge/PlayINDemo/raw/master/PlayIn_1.gif) ![image](https://github.com/lijunge/PlayINDemo/raw/master/PlayIn_2.gif)
