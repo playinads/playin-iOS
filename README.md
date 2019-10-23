@@ -5,8 +5,6 @@ PlayIN ADs -The Next Generation Playable ADs Solution
 README: [English](https://github.com/playinads/playin-iOS) | [中文](https://github.com/playinads/playin-iOS/blob/master/README_中文.md)
 
 
-![image](https://github.com/lijunge/PlayINDemo/raw/master/PlayIn_1.gif) ![image](https://github.com/lijunge/PlayINDemo/raw/master/PlayIn_2.gif)
-
 ## Project introduction
 The PlayIN Project, a next-generation playable advertisement technology based on cloud gaming technologies, can substantially optimize the user experience with playable ads. It is designed to advertise and promote mobile game apps. 
 
