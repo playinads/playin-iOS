@@ -4,9 +4,6 @@ PlayIN ADs -The Next Generation Playable ADs Solution
 
 README: [English](https://github.com/playinads/playin-iOS) | [中文](https://github.com/playinads/playin-iOS/blob/master/README_中文.md)
 
-
-![image](https://github.com/lijunge/PlayINDemo/raw/master/PlayIn_1.gif) ![image](https://github.com/lijunge/PlayINDemo/raw/master/PlayIn_2.gif)
-
 ## 项目介绍
 这是一种新型的广告技术，借助云游戏技术，应用于移动端。这种技术主要针对移动端游戏的广告推广，区别于一般游戏做的小视频推广，这种技术支持广告受众在没有下载、注册游戏的情况下，在游戏广告视频页面即点即玩，给玩家带来全新体验，让试玩方便快捷。
 这种技术主要服务于游戏广告主，能够大幅度提升广告转化率，给游戏公司和广告主带来更高效的推广方式。
