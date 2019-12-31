@@ -45,46 +45,37 @@ PlayIN Ads是一种新型的试玩广告技术，可以让用户在不安装APP�
 ```
 #### 2 在每次试玩之前都必须重新初始化配置和检测是否有可用机器，分别传入sdkKey和adid进行配置和检测
 ```objc
-- (void)checkButtonTapped:(UIButton *)sender {
+- (void)viewDidLoad {
+    
+    [super viewDidLoad];
+ 
     self.playIn = [PlayIn sharedInstance];
     self.playIn.delegate = self;
-    __weak typeof(self) weakself = self;
-    NSString *sdkKey = @"";
-    NSString *adid = @"";
-    [self.playIn configureWithKey:sdkKey completionHandler:^(BOOL success, NSString *error) {
+    self.sdkKey = @"";
+    self.adid = @"";
+}
+- (void)checkButtonTapped:(UIButton *)sender {
+ __weak typeof(self) weakself = self;
+    [self.playIn configWithKey:self.sdkKey completion:^(BOOL success, NSError * _Nullable error) {
+        NSLog(@"config playin error%@",error);
         if (success) {
-            [weakself.playIn checkAvailabilityWithAdid:adid completionHandler:^(BOOL result) {
-                weakself.isAvailable = result;
-                weakself.playNowButton.hidden = !result;
+            [weakself.playIn checkAvaliableWithAdid:weakself.adid completion:^(BOOL success, NSError * _Nullable error) {
+                NSLog(@"check playin error%@",error);
+                weakself.isAvailable = success;
+                weakself.playNowButton.hidden = !success;
             }];
-        } else {
-            NSLog(@"error: %@", error);
         }
     }];
 }
 ```
 #### 3 在有可用机器的前提下，可以进行试玩，为了试玩效果，建议添加一个反转效果。
 
-duration为试玩总时长（应小于等于网站注册游戏时所购买的最大时长），单位以秒计时，times为试玩次数，最大试玩次数为2，例： duration = 120，times = 2，则分为两次试玩，单次试玩时间为60s，即单次试玩时间= duration / times，如果为两次试玩，则在第一次试玩结束后，页面会出现提示内容，用户可选择继续试玩或者是至AppStore下载App，在第二次试玩结束后，用户可选择至AppStore下载App或者关闭试玩。
 ```objc
 - (void)playNowButtonTapped:(UIButton *)sender {
     if (self.isAvailable) {
-        __weak typeof(self) weakself = self;
-        [UIView transitionWithView:self.view duration:1.4 options:UIViewAnimationOptionTransitionFlipFromTop animations:^{
+        [self.playIn connectWithFrame:self.view.bounds];
+        [UIView transitionWithView:self.view duration:2 options:UIViewAnimationOptionTransitionFlipFromBottom animations:^{
         } completion:^(BOOL finished) {
-        }];
-        CGPoint originPoint = CGPointMake(0, 0);
-        NSInteger duration = 120;
-        NSInteger times = 2;
-        [self.playIn playWithOriginPoint:originPoint duration:duration times:times completionHandler:^(NSDictionary *result) {
-            PIError err = [[result valueForKey:@"code"] integerValue];
-            id info = [result valueForKey:@"info"];
-            if (err == PIErrorNone && [info isKindOfClass:[NSDictionary class]]) {
-                [weakself.view addSubview:self.playIn.playInView];
-                weakself.playNowButton.hidden = YES;
-            } else {
-                NSLog(@"error %@", info);
-            }
         }];
     }
 }
@@ -93,30 +84,22 @@ duration为试玩总时长（应小于等于网站注册游戏时所购买的最
 ```objc
 #pragma mark - PlayIn Delegate
 
-- (void)onPlayInTerminate {
-    [self destroyPlayIn];
+- (void)playIn:(PlayIn *)playIn didConnectSuccess:(NSDictionary *)info {
+    
+    self.playNowButton.hidden = YES;
+    
+    [self.view addSubview:self.playIn.playInView];
+    [self configPlayInSubViews];
 }
 
-- (void)onPlayInError:(NSString *)error {
-    [self destroyPlayIn];
+- (void)playIn:(PlayIn *)playIn didConnectFail:(NSError *)error {
+    
+    NSLog(@"didFailWithError%@",error);
 }
 
-- (void)onPlayInCloseAction {
-    [self destroyPlayIn];
-}
-
-- (void)onPlayInInstallAction {
-    [self destroyPlayIn];
-    NSString *appUrl = @"https://itunes.apple.com/us/app/word-cookies/id1153883316?mt=8";
-    NSURL *appURL = [NSURL URLWithString:appUrl];
-    if ([[UIApplication sharedApplication] canOpenURL:appURL]) {
-        //app store
-        if (@available(iOS 10.0, *)) {
-            [[UIApplication sharedApplication] openURL:appURL options:@{} completionHandler:nil];
-        } else {
-            [[UIApplication sharedApplication] openURL:appURL];
-        }
-    }
+- (void)playIn:(PlayIn *)playIn didDisconnect:(NSError *)error {
+    
+    NSLog(@"didDisconnectWithError%@",error);
 }
 ```
 ## 合作联系方式
