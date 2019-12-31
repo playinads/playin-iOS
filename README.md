@@ -82,11 +82,7 @@ Initialize and check if there is any device available with your sdkKey and adid:
 ```
 #### Step 3
 
-Duration is the total length of game demo play (which should be no more than the maximum time set at registration on PlayIN). Units are timed in seconds. Times is the number of game demo plays. The maximum number of demo plays is 2. 
-
-For example: duration = 120, times = 2, it is divided into two demo plays. The single demo play time is 60s, that is, single demo play time = duration / times
-
-For two demos, after the first demo, a page will be prompted for users to choose between continue the demo or download App from AppStore. After the second demo, users can choose to download App from AppStore or close the demo.
+start play.
 
 ```objc
 - (void)playNowButtonTapped:(UIButton *)sender {
