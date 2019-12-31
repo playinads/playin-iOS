@@ -57,20 +57,25 @@ The maximum time of game demo play is limited by the advertisement's actual time
 Initialize and check if there is any device available with your sdkKey and adid:
 
 ```objc
-- (void)checkButtonTapped:(UIButton *)sender {
+- (void)viewDidLoad {
+    
+    [super viewDidLoad];
+    
     self.playIn = [PlayIn sharedInstance];
     self.playIn.delegate = self;
-    __weak typeof(self) weakself = self;
-    NSString *sdkKey = @"";
-    NSString *adid = @"";
-    [self.playIn configureWithKey:sdkKey completionHandler:^(BOOL success, NSString *error) {
+    self.sdkKey = @"";
+    self.adid = @"";
+}
+- (void)checkButtonTapped:(UIButton *)sender {
+  __weak typeof(self) weakself = self;
+    [self.playIn configWithKey:self.sdkKey completion:^(BOOL success, NSError * _Nullable error) {
+        NSLog(@"config playin error%@",error);
         if (success) {
-            [weakself.playIn checkAvailabilityWithAdid:adid completionHandler:^(BOOL result) {
-                weakself.isAvailable = result;
-                weakself.playNowButton.hidden = !result;
+            [weakself.playIn checkAvaliableWithAdid:weakself.adid completion:^(BOOL success, NSError * _Nullable error) {
+                NSLog(@"check playin error%@",error);
+                weakself.isAvailable = success;
+                weakself.playNowButton.hidden = !success;
             }];
-        } else {
-            NSLog(@"error: %@", error);
         }
     }];
 }
@@ -86,22 +91,9 @@ For two demos, after the first demo, a page will be prompted for users to choose
 ```objc
 - (void)playNowButtonTapped:(UIButton *)sender {
     if (self.isAvailable) {
-        __weak typeof(self) weakself = self;
-        [UIView transitionWithView:self.view duration:1.4 options:UIViewAnimationOptionTransitionFlipFromTop animations:^{
+        [self.playIn connectWithFrame:self.view.bounds];
+        [UIView transitionWithView:self.view duration:2 options:UIViewAnimationOptionTransitionFlipFromBottom animations:^{
         } completion:^(BOOL finished) {
-        }];
-        CGPoint originPoint = CGPointMake(0, 0);
-        NSInteger duration = 120;
-        NSInteger times = 2;
-        [self.playIn playWithOriginPoint:originPoint duration:duration times:times completionHandler:^(NSDictionary *result) {
-            PIError err = [[result valueForKey:@"code"] integerValue];
-            id info = [result valueForKey:@"info"];
-            if (err == PIErrorNone && [info isKindOfClass:[NSDictionary class]]) {
-                [weakself.view addSubview:self.playIn.playInView];
-                weakself.playNowButton.hidden = YES;
-            } else {
-                NSLog(@"error %@", info);
-            }
         }];
     }
 }
@@ -111,30 +103,21 @@ For two demos, after the first demo, a page will be prompted for users to choose
 ```objc
 #pragma mark - PlayIn Delegate
 
-- (void)onPlayInTerminate {
-    [self destroyPlayIn];
+- (void)playIn:(PlayIn *)playIn didConnectSuccess:(NSDictionary *)info {
+    
+    self.playNowButton.hidden = YES;
+    
+    [self.view addSubview:self.playIn.playInView];
 }
 
-- (void)onPlayInError:(NSString *)error {
-    [self destroyPlayIn];
+- (void)playIn:(PlayIn *)playIn didConnectFail:(NSError *)error {
+    
+    NSLog(@"didFailWithError%@",error);
 }
 
-- (void)onPlayInCloseAction {
-    [self destroyPlayIn];
-}
-
-- (void)onPlayInInstallAction {
-    [self destroyPlayIn];
-    NSString *appUrl = @"https://itunes.apple.com/us/app/word-cookies/id1153883316?mt=8";
-    NSURL *appURL = [NSURL URLWithString:appUrl];
-    if ([[UIApplication sharedApplication] canOpenURL:appURL]) {
-        //app store
-        if (@available(iOS 10.0, *)) {
-            [[UIApplication sharedApplication] openURL:appURL options:@{} completionHandler:nil];
-        } else {
-            [[UIApplication sharedApplication] openURL:appURL];
-        }
-    }
+- (void)playIn:(PlayIn *)playIn didDisconnect:(NSError *)error {
+    
+    NSLog(@"didDisconnectWithError%@",error);
 }
 ```
 ## Contact us
